@@ -13,9 +13,21 @@ CORS(app)
 # The route() function of the Flask class is a decorator, 
 # which tells the application which URL should call 
 # the associated function.
-@app.route('/')
+@app.route('/', methods=['POST', 'GET'])
 def home():
-	return render_template('index.html')	
+	if(request.method == "GET"):
+		try:
+			return render_template('index.html')
+		except Exception as e:
+			print("Error in rendering template", e)
+	elif(request.method == "POST"):
+		print("THIS IS POST")
+		print(request.form)
+		video_url=request.form['video_url']
+		print("VIDEO_URL", video_url)
+		return DownloadYTVideo(video_url)
+
+
 
 @app.route('/downloadyoutubevideo', methods=['POST', 'GET'])
 # ‘/’ URL is bound with hello_world() function.
@@ -23,9 +35,10 @@ def download_yt_video():
 	try:
 		print(request.json['url'])
 		yturl=request.json["url"]
-		return { "download_url": DownloadYTVideo(yturl)}
-	except Exception as e:
-		print("Error", e)
+		# return { "download_url": DownloadYTVideo(yturl)}
+		return DownloadYTVideo(yturl)
+	except Exception as er:
+		print("Error", er)
 
 
 
@@ -35,4 +48,4 @@ if __name__ == '__main__':
 
 	# run() method of Flask class runs the application 
 	# on the local development server.
-	app.run(host="0.0.0.0", port=5000, debug=False)
+	app.run(host="0.0.0.0", port=5000)

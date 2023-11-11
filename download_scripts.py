@@ -9,11 +9,13 @@ def DownloadYTVideo(link):
     youtubeObject = youtubeObject.streams.get_highest_resolution()
     try:
         youtubeObject.download('VIDEO_DOWNLOADS')
-        downloadFolder= str(os.path.join(Path.home(), "VIDEO_DOWNLOADS"))
-        print(downloadFolder, "DOWNLOAD FOLDER")
-        return youtubeObject.download(downloadFolder)
-    except:
-        print("An error has occurred")
+        # downloadFolder= str(os.path.join(Path.home(), "VIDEO_DOWNLOADS"))
+        print("DOWNLOADED")
+        file_path= "./VIDEO_DOWNLOADS/" + youtubeObject.default_filename
+        print(file_path)
+        return send_file(file_path, as_attachment=True)
+    except Exception as e:
+        print("An error has occurred", e)
     
     
 

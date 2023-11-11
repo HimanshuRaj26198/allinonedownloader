@@ -1,0 +1,30 @@
+.navbar{
+    background-color: #7752FE !important
+}
+
+.nav-item a{
+    color: #ffff !important;
+}
+
+.navbar-brand{
+    font-weight: 700 !important;
+}
+
+#top_banner{
+    width: 100%;
+    height: 70vh;
+    background-color: #190482;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 2px 6px 2px #190482;
+}
+
+.main_title{
+    color: white;
+}
+
+.url_input{
+    width: 55%;
+}
