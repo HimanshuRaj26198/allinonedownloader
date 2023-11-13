@@ -4,15 +4,155 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>YouTube Saver</title>
+    <link rel="icon" type="image/x-icon" href="{{url_for('static', filename='/images/favicon.ico')}}"  />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <link rel="stylesheet" href='{{url_for("static", filename="/style.css")}}' />
+    <script>
+      function getResols(){
+        document.getElementById("error_container").style.display = "none";
+        document.getElementById("form_download_btn").setAttribute("disabled", "true");
+        if(document.getElementById("yt_url").value == ""){
+          document.getElementById("download_options").style.display = "none";
+          document.getElementById("error_container").style.display = "none";
+        }else{
+          document.getElementById("loader_container").style.display = "flex";
+          
+        fetch("/get_resolutions", {
+          headers:{
+            'Content-type' : 'application/json'
+          },
+          method: 'POST',
+          body: JSON.stringify({'video_url': document.getElementById("yt_url").value})
+        }).then(function (response){
+          response.json().then(function (json){
+            let eachStream = [];
+            let nStream=[];
+            json.Resolutions.replace(/<Stream: /g, '').replace(/\[/g, '').replace(/>/g, '').replace(/\]/, '').replaceAll("'", '').replaceAll('"', '').split(",").forEach((a, i)=>{a = a.split(" "); if(i!=0){ a.shift() } eachStream.push(a)});
+            eachStream.forEach(a=>{ let obj={}; a.forEach((b, i)=>{ b=b.split("=");  if(i==0){ let key = b[0]; let value = b[1]; obj[key]=value; }else{ let key = b[0]; let value = b[1]; obj[key]=value; }});nStream.push(obj) });
+            if(!document.getElementById("resolutions_box")){
+              document.getElementById("loader_container").style.display = "none";
+              document.getElementById("download_options").style.display = "block";
+              document.getElementById("form_download_btn").removeAttribute("disabled");
+              renderJSON(nStream, json.title);
+            }else{
+              document.getElementById("resolutions_box").remove();
+              document.getElementById("loader_container").style.display = "none";
+              document.getElementById("download_options").style.display = "block";
+              document.getElementById("form_download_btn").removeAttribute("disabled");
+              renderJSON(nStream, json.title);
+            }
+          }).catch(function (err){
+            document.getElementById("loader_container").style.display = "none";
+            document.getElementById("error_container").style.display = "block";
+          })
+        }).catch(function (error){
+          document.getElementById("loader_container").style.display = "none";
+          document.getElementById("error_container").style.display = "block";
+        })
+        }
+        
+      }
+
+      function renderJSON(arr, title){
+        document.getElementById("loader_container").style.display = "none"
+        let currentTitle = title;
+        let container = document.createElement("div");
+        container.id = "resolutions_box";
+        container.classList.add("options_container");
+        arr.splice(0,4).forEach(a=>{
+        let videoResoItem = document.createElement("div");
+        videoResoItem.classList.add("row");
+        videoResoItem.classList.add("video_reso_item");
+        let vidoeResItemCol1 = document.createElement("div");
+        vidoeResItemCol1.classList.add("col-md-10");
+        vidoeResItemCol1.classList.add("col-ms-12");
+        let resoRow = document.createElement("div");
+        resoRow.classList.add("row");
+        resoRow.classList.add("reso_row");
+        let resItem1 = document.createElement("div");
+        resItem1.classList.add("col-md-4");
+        resItem1.classList.add("res_item");
+        let displayTitle = document.createElement("p");
+        displayTitle.innerHTML = title.substring(0, 15);
+        let youTubeImg = document.createElement("img");
+        youTubeImg.classList.add("youtubeImg");
+        resItem1.appendChild(youTubeImg);
+        resItem1.appendChild(displayTitle);
+        youTubeImg.src = "{{url_for("static", filename="/images/youtube.png")}}"
+        let resItem2 = document.createElement("div");
+        resItem2.classList.add("col-md-4");
+        resItem2.classList.add("res_item");
+        let displayRes = document.createElement("p");
+        displayRes.innerHTML = a['res'];
+        resItem2.appendChild(displayRes);
+        let resItem3 = document.createElement("div"); 
+        resItem3.classList.add("col-md-4");
+        resItem3.classList.add("res_item");
+        let displayFormat = document.createElement("p");
+        displayFormat.innerHTML = a['mime_type'];
+        resItem3.appendChild(displayFormat);
+        resoRow.appendChild(resItem1);
+        resoRow.appendChild(resItem2);
+        resoRow.appendChild(resItem3);
+        vidoeResItemCol1.appendChild(resoRow);
+        videoResoItem.appendChild(vidoeResItemCol1);
+        let videoResItemCol2 = document.createElement("div");
+        videoResItemCol2.classList.add("col-md-2");
+        videoResItemCol2.classList.add("col-ms-12");
+        videoResItemCol2.classList.add("res_download_btn_container");
+        let downloadForm = document.createElement('form');
+        downloadForm.action = "/downloadbyitag";
+        downloadForm.method="POST"
+        let resValueInput = document.createElement("input");
+        resValueInput.type = "hidden";
+        resValueInput.name = "url";
+        resValueInput.value = document.getElementById("yt_url").value;
+        let itagValueInput = document.createElement("input");
+        itagValueInput.name = "itag";
+        itagValueInput.type = "hidden";
+        itagValueInput.value = a['itag'];
+        itagValueInput.style.display = "none";
+        let downloadBtn = document.createElement("input");
+        downloadBtn.type = "submit";
+        downloadBtn.classList.add("btn");
+        downloadBtn.classList.add("btn-info");
+        downloadBtn.classList.add("res_download_btn");
+        downloadBtn.value = "Download";
+        downloadForm.appendChild(resValueInput);
+        downloadForm.appendChild(itagValueInput);
+        downloadForm.appendChild(downloadBtn);
+        videoResItemCol2.appendChild(downloadForm);
+        videoResoItem.appendChild(videoResItemCol2);  
+        container.appendChild(videoResoItem);      
+        });
+        
+        document.getElementById("download_options").appendChild(container);
+      }
+
+
+
+      function downloadSelectedRes(url, itag){
+        let obj = JSON.stringify({ "url": url, "itag" : itag });
+        console.log(obj)
+        fetch("/downloadbyitag", {
+          headers : {
+            'Content-type' : "application/json"
+          }, method : 'POST',
+          body: obj
+        }).then(function(response){
+          console.log(response)
+        }).catch(function (e){
+          console.log(e);
+        })
+      }
+    </script>
 </head>
 <body>
   <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">YT DOWNLOADER</a>
+      <a class="navbar-brand" href="#"> <img src="{{url_for('static', filename='/images/logo.png')}}" /> YouTube Saver</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -22,13 +162,10 @@
             <a class="nav-link active" aria-current="page" href="#">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Features</a>
+            <a class="nav-link" href="#">YouTubeVideo2Mp3</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Pricing</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+            <a class="nav-link" href="#">InstagramReelDownloader</a>
           </li>
         </ul>
       </div>
@@ -38,15 +175,54 @@
 <main>
   <section id="top_banner" >
    <div class="title_container" >
-    <h1 class="main_title" > Youtube Video Downloader </h1>
+    <h1 class="main_title" > YouTube Video Downloader </h1>
    </div>
     <div class="form_container" >
-      <form method="POST" action="/" >
-        <input class="url_input"  type="text" placeholder="Paster YOutube Video URL" name="video_url"  />
-        <input class="btn btn-info"  type="submit" text="Download" />
+      <form  method="POST" action="/" >
+       <div class="row" >
+        <div class="col-md-10 col-sm-12 input_container" ><input class=" url_input" id="yt_url" onKeyUp="getResols()"  type="text" placeholder="Paster Youtube Video URL" name="video_url"  /> </div>
+        <div class="col-md-2 col-sm-12 button_container"><input id="form_download_btn"  class="btn btn-info"  type="submit" value="Download HD" /></div>
+       </div>
       </form>  
     </div>
+    <div id="error_container" >
+      <p> Can't find this video, please try with another url! </p>
+    </div>
+    <div id="loader_container" >
+      <span> <img src="{{url_for('static', filename='/images/loader.svg')}}"/>  </span>
+      <p> Searching best resolutions for you! </p>
+    </div>
+
+    <div id="youtube_iframe_container" >
+      <iframe id="ytFrame" width="200" height="130" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+    <div id="download_options" >
+      <div class="title_container">
+        <h2> Download this YouTube Video in multiple resolutions. </h2>
+      </div>
+      <div class="row first_row" >
+        <div class="col-md-10" >
+          <div class="row">
+            <div class="col-md-4" >
+              <p>Video Title</p>
+             </div>
+             <div class="col-md-4" >
+               <p> Video Resolution</p>
+             </div>
+             <div class="col-md-4" >
+               <p>Format</p>
+             </div>
+          </div>
+        </div>
+        <div class="col-md-2 col-ms-12 " >
+          <p> Action </p>
+      </div>
+      </div>
+     
+    </div>
+
   <section>
+
 </main>
 
 </body>

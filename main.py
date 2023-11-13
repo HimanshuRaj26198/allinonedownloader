@@ -1,7 +1,7 @@
 # Importing flask module in the project is mandatory
 # An object of Flask class is our WSGI application.
 from flask import Flask, request, send_from_directory, render_template
-from download_scripts import DownloadYTVideo
+from download_scripts import DownloadYTVideo, get_all_video_resolutions, return_yt_by_itag
 from flask_cors import CORS
 import os
 
@@ -13,6 +13,14 @@ CORS(app)
 # The route() function of the Flask class is a decorator, 
 # which tells the application which URL should call 
 # the associated function.
+@app.route('/get_resolutions', methods=['POST'])
+def find_video_resolutions():
+	if(request.method == 'POST'):
+		video_url=request.json['video_url']
+		return get_all_video_resolutions(video_url)
+	
+	
+
 @app.route('/', methods=['POST', 'GET'])
 def home():
 	if(request.method == "GET"):
@@ -21,8 +29,6 @@ def home():
 		except Exception as e:
 			print("Error in rendering template", e)
 	elif(request.method == "POST"):
-		print("THIS IS POST")
-		print(request.form)
 		video_url=request.form['video_url']
 		print("VIDEO_URL", video_url)
 		return DownloadYTVideo(video_url)
@@ -39,6 +45,16 @@ def download_yt_video():
 		return DownloadYTVideo(yturl)
 	except Exception as er:
 		print("Error", er)
+
+@app.route('/downloadbyitag', methods=['POST'])
+def download_yt_vide_by_itag():
+	if(request.method == "POST"):
+		url = request.form['url']
+		itag = request.form['itag']
+		try:
+			return return_yt_by_itag(url, itag)
+		except Exception as e:
+			print(e)
 
 
 

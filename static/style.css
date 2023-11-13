@@ -1,3 +1,9 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+
 .navbar{
     background-color: #7752FE !important
 }
@@ -8,23 +14,180 @@
 
 .navbar-brand{
     font-weight: 700 !important;
+    color: white !important;
+}
+.navbar-brand img{
+    width: 40px;
+    height: auto;
 }
 
 #top_banner{
     width: 100%;
-    height: 70vh;
+    min-height: 70vh;
     background-color: #190482;
     display: flex;
+    gap: 20px;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    box-shadow: 0px 2px 6px 2px #190482;
+    box-shadow: 0px 2px 55px 15px #190482;
+    padding: 8px;
+    /* padding-top: 8%; */
+    
+
 }
+
+.title_container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.title_container h1{
+    text-align: center;
+}
+
 
 .main_title{
     color: white;
 }
 
-.url_input{
-    width: 55%;
+.form_container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+
+form{
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    gap: 35px;
+}
+
+form .row{
+    width: 100%;
+}
+
+form .row .input_container{
+    margin-bottom: 10px;
+}
+
+form .row .input_container .url_input{
+    border: none;
+    height: 35px;
+    border-radius: 4px;
+    width: 100%;
+}
+
+form .row .button_container input{
+    width: 100%;
+}
+
+.url_input::placeholder{
+    text-align: center;
+    color: #190482;
+}
+
+
+.title_container h2{
+    text-align: center;
+    color: #7752FE;
+}
+
+
+#download_options{
+    margin-top: 20px;
+    display: none;
+}
+
+#resolutions_box{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+}
+
+
+.res_item{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center !important;
+}
+
+.res_item p{
+    margin-bottom: 0 !important;
+}
+
+.video_reso_item{
+    background-color: white;
+    align-items: center;
+    font-weight: 500;
+    border-bottom: 0.2px solid gray;
+    padding: 5px;
+}
+
+
+
+.reso_row{
+    display: flex;
+    align-items: center;
+}
+
+.first_row{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center !important;
+    background-color: white;
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+    font-weight: bold;
+}
+
+.res_download_btn{
+    font-size: 15px;
+}
+
+.res_download_btn_container{
+    display: flex;
+    justify-content: center !important;
+}
+
+.youtubeImg{
+    width: 25px;
+    height: auto;
+    margin-right: 5px;
+}
+
+
+#loader_container{
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+#loader_container p {
+    color: white;
+  
+}
+
+
+#error_container{
+    display: none;
+}
+#error_container p{
+    color: red;
+    font-size: 19px;
+    text-align: center;
+    
+}
+
+#ytFrame{
+    display: none;
 }
