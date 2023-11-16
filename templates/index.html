@@ -1,340 +1,520 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Saver</title>
-    <link rel="icon" type="image/x-icon" href="{{url_for('static', filename='/images/favicon.ico')}}"  />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href='{{url_for("static", filename="/style.css")}}' />
-    <script  >
-      function getResols(){
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SmartYouTubeSaver</title>
+    <meta
+      name="descripton"
+      content="SmartYouTubeSaver&#039;s Youtbe Video Downloader - secure and fast - Download Unlimited YouTube Videos. High Quality video download MP4, MP3, 3gp, high resolution very easily!"
+    />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{{url_for('static', filename='/images/favicon.ico')}}"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href='{{url_for("static", filename="/style.css")}}'
+    />
+    <script>
+      function getResols() {
         document.getElementById("error_container").style.display = "none";
-        document.getElementById("form_download_btn").setAttribute("disabled", "true");
-        if(document.getElementById("yt_url").value == ""){
+        document
+          .getElementById("form_download_btn")
+          .setAttribute("disabled", "true");
+        if (document.getElementById("yt_url").value == "") {
           document.getElementById("download_options").style.display = "none";
           document.getElementById("error_container").style.display = "none";
-        }else{
+        } else {
           document.getElementById("loader_container").style.display = "flex";
-          
-        fetch("/get_resolutions", {
-          headers:{
-            'Content-type' : 'application/json'
-          },
-          method: 'POST',
-          body: JSON.stringify({'video_url': document.getElementById("yt_url").value})
-        }).then(function (response){
-          response.json().then(function (json){
-            let eachStream = [];
-            let nStream=[];
-            json.Resolutions.replace(/<Stream: /g, '').replace(/\[/g, '').replace(/>/g, '').replace(/\]/, '').replaceAll("'", '').replaceAll('"', '').split(",").forEach((a, i)=>{a = a.split(" "); if(i!=0){ a.shift() } eachStream.push(a)});
-            eachStream.forEach(a=>{ let obj={}; a.forEach((b, i)=>{ b=b.split("=");  if(i==0){ let key = b[0]; let value = b[1]; obj[key]=value; }else{ let key = b[0]; let value = b[1]; obj[key]=value; }});nStream.push(obj) });
-            if(!document.getElementById("resolutions_box")){
-              document.getElementById("loader_container").style.display = "none";
-              document.getElementById("download_options").style.display = "block";
-              document.getElementById("form_download_btn").removeAttribute("disabled");
-              renderJSON(nStream, json.title);
-            }else{
-              document.getElementById("resolutions_box").remove();
-              document.getElementById("loader_container").style.display = "none";
-              document.getElementById("download_options").style.display = "block";
-              document.getElementById("form_download_btn").removeAttribute("disabled");
-              renderJSON(nStream, json.title);
-            }
-          }).catch(function (err){
-            document.getElementById("loader_container").style.display = "none";
-            document.getElementById("error_container").style.display = "block";
+
+          fetch("/get_resolutions", {
+            headers: {
+              "Content-type": "application/json",
+            },
+            method: "POST",
+            body: JSON.stringify({
+              video_url: document.getElementById("yt_url").value,
+            }),
           })
-        }).catch(function (error){
-          document.getElementById("loader_container").style.display = "none";
-          document.getElementById("error_container").style.display = "block";
-        })
+            .then(function (response) {
+              response
+                .json()
+                .then(function (json) {
+                  let eachStream = [];
+                  let nStream = [];
+                  json.Resolutions.replace(/<Stream: /g, "")
+                    .replace(/\[/g, "")
+                    .replace(/>/g, "")
+                    .replace(/\]/, "")
+                    .replaceAll("'", "")
+                    .replaceAll('"', "")
+                    .split(",")
+                    .forEach((a, i) => {
+                      a = a.split(" ");
+                      if (i != 0) {
+                        a.shift();
+                      }
+                      eachStream.push(a);
+                    });
+                  eachStream.forEach((a) => {
+                    let obj = {};
+                    a.forEach((b, i) => {
+                      b = b.split("=");
+                      if (i == 0) {
+                        let key = b[0];
+                        let value = b[1];
+                        obj[key] = value;
+                      } else {
+                        let key = b[0];
+                        let value = b[1];
+                        obj[key] = value;
+                      }
+                    });
+                    nStream.push(obj);
+                  });
+                  if (!document.getElementById("resolutions_box")) {
+                    document.getElementById("loader_container").style.display =
+                      "none";
+                    document.getElementById("download_options").style.display =
+                      "block";
+                    document
+                      .getElementById("form_download_btn")
+                      .removeAttribute("disabled");
+                    renderJSON(nStream, json.title);
+                  } else {
+                    document.getElementById("resolutions_box").remove();
+                    document.getElementById("loader_container").style.display =
+                      "none";
+                    document.getElementById("download_options").style.display =
+                      "block";
+                    document
+                      .getElementById("form_download_btn")
+                      .removeAttribute("disabled");
+                    renderJSON(nStream, json.title);
+                  }
+                })
+                .catch(function (err) {
+                  document.getElementById("loader_container").style.display =
+                    "none";
+                  document.getElementById("error_container").style.display =
+                    "block";
+                });
+            })
+            .catch(function (error) {
+              document.getElementById("loader_container").style.display =
+                "none";
+              document.getElementById("error_container").style.display =
+                "block";
+            });
         }
-        
       }
-    
-      function renderJSON(arr, title){
-        document.getElementById("loader_container").style.display = "none"
+
+      function renderJSON(arr, title) {
+        document.getElementById("loader_container").style.display = "none";
         let currentTitle = title;
         let container = document.createElement("div");
         container.id = "resolutions_box";
         container.classList.add("options_container");
-        arr.splice(0,4).forEach(a=>{
-        let videoResoItem = document.createElement("div");
-        videoResoItem.classList.add("row");
-        videoResoItem.classList.add("video_reso_item");
-        let vidoeResItemCol1 = document.createElement("div");
-        vidoeResItemCol1.classList.add("col-md-10");
-        vidoeResItemCol1.classList.add("col-ms-12");
-        let resoRow = document.createElement("div");
-        resoRow.classList.add("row");
-        resoRow.classList.add("reso_row");
-        let resItem1 = document.createElement("div");
-        resItem1.classList.add("col-md-4");
-        resItem1.classList.add("res_item");
-        let displayTitle = document.createElement("p");
-        displayTitle.innerHTML = title.substring(0, 15);
-        let youTubeImg = document.createElement("img");
-        youTubeImg.classList.add("youtubeImg");
-        resItem1.appendChild(youTubeImg);
-        resItem1.appendChild(displayTitle);
-        youTubeImg.src = `{{url_for("static", filename="/images/youtube.png")}}`
-        let resItem2 = document.createElement("div");
-        resItem2.classList.add("col-md-4");
-        resItem2.classList.add("res_item");
-        let displayRes = document.createElement("p");
-        displayRes.innerHTML = a['res'];
-        resItem2.appendChild(displayRes);
-        let resItem3 = document.createElement("div"); 
-        resItem3.classList.add("col-md-4");
-        resItem3.classList.add("res_item");
-        let displayFormat = document.createElement("p");
-        displayFormat.innerHTML = a['mime_type'];
-        resItem3.appendChild(displayFormat);
-        resoRow.appendChild(resItem1);
-        resoRow.appendChild(resItem2);
-        resoRow.appendChild(resItem3);
-        vidoeResItemCol1.appendChild(resoRow);
-        videoResoItem.appendChild(vidoeResItemCol1);
-        let videoResItemCol2 = document.createElement("div");
-        videoResItemCol2.classList.add("col-md-2");
-        videoResItemCol2.classList.add("col-ms-12");
-        videoResItemCol2.classList.add("res_download_btn_container");
-        let downloadForm = document.createElement('form');
-        downloadForm.action = "/downloadbyitag";
-        downloadForm.method="POST"
-        let resValueInput = document.createElement("input");
-        resValueInput.type = "hidden";
-        resValueInput.name = "url";
-        resValueInput.value = document.getElementById("yt_url").value;
-        let itagValueInput = document.createElement("input");
-        itagValueInput.name = "itag";
-        itagValueInput.type = "hidden";
-        itagValueInput.value = a['itag'];
-        itagValueInput.style.display = "none";
-        let downloadBtn = document.createElement("input");
-        downloadBtn.type = "submit";
-        downloadBtn.classList.add("btn");
-        downloadBtn.classList.add("btn-info");
-        downloadBtn.classList.add("res_download_btn");
-        downloadBtn.value = "Download";
-        downloadForm.appendChild(resValueInput);
-        downloadForm.appendChild(itagValueInput);
-        downloadForm.appendChild(downloadBtn);
-        videoResItemCol2.appendChild(downloadForm);
-        videoResoItem.appendChild(videoResItemCol2);  
-        container.appendChild(videoResoItem);      
+        arr.splice(0, 4).forEach((a) => {
+          let videoResoItem = document.createElement("div");
+          videoResoItem.classList.add("row");
+          videoResoItem.classList.add("video_reso_item");
+          let vidoeResItemCol1 = document.createElement("div");
+          vidoeResItemCol1.classList.add("col-md-10");
+          vidoeResItemCol1.classList.add("col-ms-12");
+          let resoRow = document.createElement("div");
+          resoRow.classList.add("row");
+          resoRow.classList.add("reso_row");
+          let resItem1 = document.createElement("div");
+          resItem1.classList.add("col-md-4");
+          resItem1.classList.add("res_item");
+          let displayTitle = document.createElement("p");
+          displayTitle.innerHTML = title.substring(0, 15);
+          let youTubeImg = document.createElement("img");
+          youTubeImg.classList.add("youtubeImg");
+          resItem1.appendChild(youTubeImg);
+          resItem1.appendChild(displayTitle);
+          youTubeImg.src = `{{url_for("static", filename="/images/youtube.png")}}`;
+          let resItem2 = document.createElement("div");
+          resItem2.classList.add("col-md-4");
+          resItem2.classList.add("res_item");
+          let displayRes = document.createElement("p");
+          displayRes.innerHTML = a["res"];
+          resItem2.appendChild(displayRes);
+          let resItem3 = document.createElement("div");
+          resItem3.classList.add("col-md-4");
+          resItem3.classList.add("res_item");
+          let displayFormat = document.createElement("p");
+          displayFormat.innerHTML = a["mime_type"];
+          resItem3.appendChild(displayFormat);
+          resoRow.appendChild(resItem1);
+          resoRow.appendChild(resItem2);
+          resoRow.appendChild(resItem3);
+          vidoeResItemCol1.appendChild(resoRow);
+          videoResoItem.appendChild(vidoeResItemCol1);
+          let videoResItemCol2 = document.createElement("div");
+          videoResItemCol2.classList.add("col-md-2");
+          videoResItemCol2.classList.add("col-ms-12");
+          videoResItemCol2.classList.add("res_download_btn_container");
+          let downloadForm = document.createElement("form");
+          downloadForm.action = "/downloadbyitag";
+          downloadForm.method = "POST";
+          let resValueInput = document.createElement("input");
+          resValueInput.type = "hidden";
+          resValueInput.name = "url";
+          resValueInput.value = document.getElementById("yt_url").value;
+          let itagValueInput = document.createElement("input");
+          itagValueInput.name = "itag";
+          itagValueInput.type = "hidden";
+          itagValueInput.value = a["itag"];
+          itagValueInput.style.display = "none";
+          let downloadBtn = document.createElement("input");
+          downloadBtn.type = "submit";
+          downloadBtn.classList.add("btn");
+          downloadBtn.classList.add("btn-info");
+          downloadBtn.classList.add("res_download_btn");
+          downloadBtn.value = "Download";
+          downloadForm.appendChild(resValueInput);
+          downloadForm.appendChild(itagValueInput);
+          downloadForm.appendChild(downloadBtn);
+          videoResItemCol2.appendChild(downloadForm);
+          videoResoItem.appendChild(videoResItemCol2);
+          container.appendChild(videoResoItem);
         });
-        
+
         document.getElementById("download_options").appendChild(container);
       }
-    
-    
-    
-      function downloadSelectedRes(url, itag){
-        let obj = JSON.stringify({ "url": url, "itag" : itag });
-        console.log(obj)
+
+      function downloadSelectedRes(url, itag) {
+        let obj = JSON.stringify({ url: url, itag: itag });
+        console.log(obj);
         fetch("/downloadbyitag", {
-          headers : {
-            'Content-type' : "application/json"
-          }, method : 'POST',
-          body: obj
-        }).then(function(response){
-          console.log(response)
-        }).catch(function (e){
-          console.log(e);
+          headers: {
+            "Content-type": "application/json",
+          },
+          method: "POST",
+          body: obj,
         })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (e) {
+            console.log(e);
+          });
       }
     </script>
-</head>
-<body>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#"> <img src="{{url_for('static', filename='/images/logo.png')}}" /> YouTube Saver</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">YouTubeVideo2Mp3</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">InstagramReelDownloader</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-
-<main>
-  <section id="top_banner" >
-   <div class="title_container" >
-    <h1 class="main_title" > YouTube Video Downloader </h1>
-   </div>
-    <div class="form_container" >
-      <form  method="POST" action="/" >
-       <div class="row" >
-        <div class="col-md-10 col-sm-12 input_container" ><input class=" url_input" id="yt_url" onKeyUp="getResols()"  type="text" placeholder="Paster Youtube Video URL" name="video_url"  /> </div>
-        <div class="col-md-2 col-sm-12 button_container"><input id="form_download_btn"  class="btn btn-info"  type="submit" value="Download HD" /></div>
-       </div>
-      </form>  
-    </div>
-    <div id="error_container" >
-      <p> Can't find this video, please try with another url! </p>
-    </div>
-    <div id="loader_container" >
-      <span> <img src="{{url_for('static', filename='/images/loader.svg')}}"/>  </span>
-      <p> Searching best resolutions for you! </p>
-    </div>
-    <div id="youtube_iframe_container" >
-      <iframe id="ytFrame" width="200" height="130" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-    </div>
-    <div id="download_options" >
-      <div class="title_container">
-        <h2> Download this YouTube Video in multiple resolutions. </h2>
-      </div>
-      <div class="row first_row" >
-        <div class="col-md-10" >
-          <div class="row">
-            <div class="col-md-4" >
-              <p>Video Title</p>
-             </div>
-             <div class="col-md-4" >
-               <p> Video Resolution</p>
-             </div>
-             <div class="col-md-4" >
-               <p>Format</p>
-             </div>
-          </div>
-        </div>
-        <div class="col-md-2 col-ms-12 " >
-          <p> Action </p>
-      </div>
-      </div>   
-    </div>
-  </section>
-  <section class="row section_second" >
-    <div class="col-md-2 left_col" ></div>
-    <div class="col-md-8 center_col" >
-      <div class="platform_descr" >
-        <p>
-          Discover a myriad of video downloading possibilities through HNYouTube, the ultimate solution for overcoming YouTube's download limitations. Whether there's a lack of native download features, fear not – our fast, secure, and user-friendly service is tailor-made to cater to your requirements!
-        </p>
-      </div>
-    
-      <div class=" icon_container">
-        <h3>Supported Platforms</h3>
-        <div class="row icons" >
-          <div class="col-md-3 col-ms-12 icon_box">
-            <img class="os_icon" src="{{url_for('static', filename='/images/window.png')}}" /> 
-          </div>
-          <div class="col-md-3 col-ms-12 icon_box">
-            <img class="os_icon" src="{{url_for('static', filename='/images/apple.png')}}" /> 
-          </div>
-          <div class="col-md-3 col-ms-12 icon_box"> 
-            <img class="os_icon" src="{{url_for('static', filename='/images/android.png')}}" /> 
-          </div>
-          <div class="col-md-3 col-ms-12 icon_box">
-            <img class="os_icon"  src="{{url_for('static', filename='/images/linux.png')}}" /> 
-          </div>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          <img src="{{url_for('static', filename='/images/logo.png')}}" />
+          YouTube Saver</a
+        >
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">YouTubeVideo2Mp3</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">InstagramReelDownloader</a>
+            </li>
+          </ul>
         </div>
       </div>
+    </nav>
 
-      <div class="feature_list_container" >
-        <ol>
-          <li>Unlimited Video Downloading with HNYouTube.</li>
-          <li>We provide you an option to download video in your preferred resolution.</li>
-          <li>We guarranty a high prmium quality video and aurdio.</li>
-          <li>We provide multiple formats like 3gp, MP4, webm, etc...</li>
-          <li>Easy steps for downloading video.</li>
-          <li>Tutorial steps for downloaing video in description.</li>
-        </ol>
-      </div>
-
-      <div class="yt_video_guide" >
-        <div class="guide_title" >
-          <h2>Complete Guide: How to Download Videos from YouTube Online</h2>
+    <main>
+      <section id="top_banner">
+        <div class="title_container">
+          <h1 class="main_title">YouTube Video Downloader</h1>
         </div>
-        <div class="row img_steps" >
-            <div class="col-md-4 col-ms-12">
-              <img src="{{url_for('static', filename='/images/howto2.png')}}" />
-              <p> Copy the video url from YouTube and pase in in the SamrtYouTubeSaver. </p>
+        <div class="form_container">
+          <form method="POST" action="/">
+            <div class="row">
+              <div class="col-md-10 col-sm-12 input_container">
+                <input
+                  class="url_input"
+                  id="yt_url"
+                  onKeyUp="getResols()"
+                  type="text"
+                  placeholder="Paster Youtube Video URL"
+                  name="video_url"
+                />
+              </div>
+              <div class="col-md-2 col-sm-12 button_container">
+                <input
+                  id="form_download_btn"
+                  class="btn btn-info"
+                  type="submit"
+                  value="Download HD"
+                />
+              </div>
             </div>
-            <div class="col-md-4 col-ms-12">
-              <img src="{{url_for('static', filename='/images/howto3.png')}}" />
-              <p> After pasting the YouTube Video URL in SmartVideoSaver, wait till all the reolutions gets loaded. </p>
-            </div>
-            <div class="col-md-4 col-ms-12">
-              <img src="{{url_for('static', filename='/images/howto4.png')}}" />
-              <p> Click on the Download button to download your YouTube video from SmartYouTubeSaver. </p>
-            </div>
+          </form>
         </div>
-      </div>
-    </div>
-    <div class="col-md-2 right_col"></div>
-  </section>
-  <section class="row article_1" >
-    <div class="col-md-2 left_col"></div>
-    <div class="col-md-8 center_col">
-      <div class="article_title">
-        <h1>How to download Any Video On Internet?</h1>
-      </div>
-      <div class="article_content">
-        <p>If you're trying to download videos for which you have the right permissions or that are provided for download by the content creator, and you're using a tool like Internet Download Manager (IDM), here's a general guide:</p>
+        <div id="error_container">
+          <p>Can't find this video, please try with another url!</p>
+        </div>
+        <div id="loader_container">
+          <span>
+            <img src="{{url_for('static', filename='/images/loader.svg')}}" />
+          </span>
+          <p>Searching best resolutions for you!</p>
+        </div>
+        <div id="youtube_iframe_container">
+          <iframe
+            id="ytFrame"
+            width="200"
+            height="130"
+            src=""
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <div id="download_options">
+          <div class="title_container">
+            <h2>Download this YouTube Video in multiple resolutions.</h2>
+          </div>
+          <div class="row first_row">
+            <div class="col-md-10">
+              <div class="row">
+                <div class="col-md-4">
+                  <p>Video Title</p>
+                </div>
+                <div class="col-md-4">
+                  <p>Video Resolution</p>
+                </div>
+                <div class="col-md-4">
+                  <p>Format</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2 col-ms-12">
+              <p>Action</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="row section_second">
+        <div class="col-md-2 left_col"></div>
+        <div class="col-md-8 center_col">
+          <div class="platform_descr">
+            <p>
+              Discover a myriad of video downloading possibilities through
+              HNYouTube, the ultimate solution for overcoming YouTube's download
+              limitations. Whether there's a lack of native download features,
+              fear not – our fast, secure, and user-friendly service is
+              tailor-made to cater to your requirements!
+            </p>
+          </div>
 
-        <ol>
-          <li> <span class="list_title" >Install IDM:</span> Make sure you have IDM installed on your computer. You can download it from the official website. </li>
-          <li> <span class="list_title" >Enable Browser Extension:</span>IDM usually integrates with web browsers like Chrome, Firefox, or others. Ensure that the IDM extension is enabled in your browser. </li>
-          <li> <span class="list_title" >Visit the Video Page:
-          </span>Open the webpage where the video is located. </li>
-          <li> <span class="list_title" >IDM Download Panel:
-          </span>Once the IDM extension is active, you should see a download button or panel overlaid on the video. It may appear as a small icon on the video or in the form of a download button. </li>
-          <li> <span class="list_title" >Start Download:
-          </span>Click on the download button or panel. IDM will intercept the video link and start the download process.</li>
-          <li> <span class="list_title" >Choose Download Settings:
-          </span>IDM usually provides options to choose the video quality and download settings. Select your preferred options.</li>
-          <li> <span class="list_title" >Download Progress:
-          </span>Monitor the download progress in the IDM interface. Once the download is complete, the video should be available on your computer.</li>
-        </ol>
-      </div>
-    </div>
-    <div class="col-md-2 right_col" ></div>
-  </section>
-  
-</main>
-<footer>
-    <div class="copyright" >
-      &#169; YouTube Downloader, made with <span style="color:red;">&#9829;</span> by SmartYouTubeSaver.
-    </div>
-    <div class="row footer_links_container" >
-      <div class="col-md-3" >
-        <a><p>YouTube Downloader</p></a>
-        <a><p>Donwload YouTube to mp3</p></a>
-        <a><p>YouTube Shorts</p></a>
-      </div>
-      <div class="col-md-3" >
-        <a><p>TikTok Downloader</p></a>
-        <a><p>Instagram Video Downloader</p></a>
-        <a><p>Facebook Video Downloader</p></a>
-        <a><p>Twitter Video Downloader</p></a>
-      </div>
-      <div class="col-md-3" >
-        <a><p>About Us</p></a>
-        <a><p>Privace Policy</p></a>
-        <a><p>Terms of Service</p></a>
-        <a><p>Contact</p></a>
-        <a><p>API</p></a>
-      </div>
-      <div class="col-md-3" ></div>
-    </div>
-</footer>
+          <div class="icon_container">
+            <h3>Supported Platforms</h3>
+            <div class="row icons">
+              <div class="col-md-3 col-ms-12 icon_box">
+                <img
+                  class="os_icon"
+                  alt="Download High Quality YouTube videos on Windows!"
+                  src="{{url_for('static', filename='/images/window.png')}}"
+                />
+              </div>
+              <div class="col-md-3 col-ms-12 icon_box">
+                <img
+                  class="os_icon"
+                  alt="Download High Quality YouTube videos on MAC!"
+                  src="{{url_for('static', filename='/images/apple.png')}}"
+                />
+              </div>
+              <div class="col-md-3 col-ms-12 icon_box">
+                <img
+                  class="os_icon"
+                  alt="Download High Quality YouTube videos on Android!"
+                  src="{{url_for('static', filename='/images/android.png')}}"
+                />
+              </div>
+              <div class="col-md-3 col-ms-12 icon_box">
+                <img
+                  class="os_icon"
+                  alt="Download High Quality YouTube videos on Linux!"
+                  src="{{url_for('static', filename='/images/linux.png')}}"
+                />
+              </div>
+            </div>
+          </div>
 
-</body>
+          <div class="feature_list_container">
+            <ol>
+              <li>Unlimited Video Downloading with HNYouTube.</li>
+              <li>
+                We provide you an option to download video in your preferred
+                resolution.
+              </li>
+              <li>We guarranty a high prmium quality video and aurdio.</li>
+              <li>We provide multiple formats like 3gp, MP4, webm, etc...</li>
+              <li>Easy steps for downloading video.</li>
+              <li>Tutorial steps for downloaing video in description.</li>
+            </ol>
+          </div>
+
+          <div class="yt_video_guide">
+            <div class="guide_title">
+              <h2>
+                Complete Guide: How to Download Videos from YouTube Online
+              </h2>
+            </div>
+            <div class="row img_steps">
+              <div class="col-md-4 col-ms-12">
+                <img
+                  alt="Copy the video url from YouTube and pase in in the
+                SamrtYouTubeSaver."
+                  src="{{url_for('static', filename='/images/howto2.png')}}"
+                />
+                <p>
+                  Copy the video url from YouTube and pase in in the
+                  SamrtYouTubeSaver.
+                </p>
+              </div>
+              <div class="col-md-4 col-ms-12">
+                <img
+                  alt="After pasting the YouTube Video URL in SmartVideoSaver, wait
+                till all the reolutions gets loaded."
+                  src="{{url_for('static', filename='/images/howto3.png')}}"
+                />
+                <p>
+                  After pasting the YouTube Video URL in SmartVideoSaver, wait
+                  till all the reolutions gets loaded.
+                </p>
+              </div>
+              <div class="col-md-4 col-ms-12">
+                <img
+                  alt="Click on the Download button to download your YouTube video
+                from SmartYouTubeSaver."
+                  src="{{url_for('static', filename='/images/howto4.png')}}"
+                />
+                <p>
+                  Click on the Download button to download your YouTube video
+                  from SmartYouTubeSaver.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2 right_col"></div>
+      </section>
+      <section class="row article_1">
+        <div class="col-md-2 left_col"></div>
+        <div class="col-md-8 center_col">
+          <div class="article_title">
+            <h1>How to download Any Video On Internet?</h1>
+          </div>
+          <div class="article_content">
+            <p>
+              If you're trying to download videos for which you have the right
+              permissions or that are provided for download by the content
+              creator, and you're using a tool like Internet Download Manager
+              (IDM), here's a general guide:
+            </p>
+
+            <ol>
+              <li>
+                <span class="list_title">Install IDM:</span> Make sure you have
+                IDM installed on your computer. You can download it from the
+                official website.
+              </li>
+              <li>
+                <span class="list_title">Enable Browser Extension:</span>IDM
+                usually integrates with web browsers like Chrome, Firefox, or
+                others. Ensure that the IDM extension is enabled in your
+                browser.
+              </li>
+              <li>
+                <span class="list_title">Visit the Video Page: </span>Open the
+                webpage where the video is located.
+              </li>
+              <li>
+                <span class="list_title">IDM Download Panel: </span>Once the IDM
+                extension is active, you should see a download button or panel
+                overlaid on the video. It may appear as a small icon on the
+                video or in the form of a download button.
+              </li>
+              <li>
+                <span class="list_title">Start Download: </span>Click on the
+                download button or panel. IDM will intercept the video link and
+                start the download process.
+              </li>
+              <li>
+                <span class="list_title">Choose Download Settings: </span>IDM
+                usually provides options to choose the video quality and
+                download settings. Select your preferred options.
+              </li>
+              <li>
+                <span class="list_title">Download Progress: </span>Monitor the
+                download progress in the IDM interface. Once the download is
+                complete, the video should be available on your computer.
+              </li>
+            </ol>
+          </div>
+        </div>
+        <div class="col-md-2 right_col"></div>
+      </section>
+    </main>
+    <footer>
+      <div class="copyright">
+        &#169; YouTube Downloader, made with
+        <span style="color: red">&#9829;</span> by SmartYouTubeSaver.
+      </div>
+      <div class="row footer_links_container">
+        <div class="col-md-3">
+          <a><p>YouTube Downloader</p></a>
+          <a><p>Donwload YouTube to mp3</p></a>
+          <a><p>YouTube Shorts</p></a>
+        </div>
+        <div class="col-md-3">
+          <a><p>TikTok Downloader</p></a>
+          <a><p>Instagram Video Downloader</p></a>
+          <a><p>Facebook Video Downloader</p></a>
+          <a><p>Twitter Video Downloader</p></a>
+        </div>
+        <div class="col-md-3">
+          <a><p>About Us</p></a>
+          <a><p>Privace Policy</p></a>
+          <a><p>Terms of Service</p></a>
+          <a><p>Contact</p></a>
+          <a><p>API</p></a>
+        </div>
+        <div class="col-md-3"></div>
+      </div>
+    </footer>
+  </body>
 </html>
