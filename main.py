@@ -1,9 +1,8 @@
 # Importing flask module in the project is mandatory
 # An object of Flask class is our WSGI application.
-from flask import Flask, request, send_from_directory, render_template
+from flask import Flask, request, render_template
 from download_scripts import DownloadYTVideo, get_all_video_resolutions, return_yt_by_itag
 from flask_cors import CORS
-import os
 
 print("EXECUTION MAIN JS")
 
