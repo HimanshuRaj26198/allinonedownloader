@@ -1,5 +1,4 @@
 from pytube import YouTube
-from moviepy.editor import *
 from flask import send_file, abort
 from io import BytesIO
 

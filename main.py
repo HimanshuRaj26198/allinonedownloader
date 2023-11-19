@@ -3,9 +3,6 @@
 from flask import Flask, request, render_template
 from download_scripts import DownloadYTVideo, get_all_video_resolutions, return_yt_by_itag
 from flask_cors import CORS
-
-print("EXECUTION MAIN JS")
-
 # Flask constructor takes the name of 
 # current module (__name__) as argument.
 app = Flask(__name__)
