@@ -14,3 +14,18 @@
       aria-valuemax="100"
     ></div>
   </div>
+  <div class="download_msg" >
+    <p>Please wait, Your Video will be downloaded automatically. Thanks! </p> 
+    <span class="close-ico-btn"><i class="fa-solid fa-rectangle-xmark"></i></span>
+ </div>
+
+  <script>
+    function loadProgress(){
+        document.getElementsByClassName("progress")[0].style.display = "flex";
+        setInterval(function(){
+          if(parseInt(document.getElementsByClassName("progress-bar")[0].style.width.slice(0,-1)) < 75 ){
+            document.getElementsByClassName("progress-bar")[0].style.width = (parseInt(document.getElementsByClassName("progress-bar")[0].style.width.substring(0,document.getElementsByClassName("progress-bar")[0].style.width.length - 1)) + 1)  + "%";
+            console.log(document.getElementsByClassName("progress-bar")[0].style.width)
+          }
+        },100)
+  </script>

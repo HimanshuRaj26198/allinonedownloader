@@ -337,7 +337,7 @@ footer .footer_links_container {
   align-items: center;
   text-align: center;
   justify-content: center;
-  display: none;
+  /* display: none; */
 }
 
 .download_msg p{
@@ -352,6 +352,6 @@ footer .footer_links_container {
   position: relative;
   /* transform: translate(85px,-30px); */
   float: right;
-  top: -40%;
+  top: -10%;
   cursor: pointer;
 }
