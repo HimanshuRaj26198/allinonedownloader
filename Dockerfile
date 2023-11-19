@@ -10,10 +10,11 @@ COPY . /app
 # Install the application dependencies
 RUN pip install -r requirements.txt
 
-EXPOSE 5000
 ENV FLASK_APP=main.py
 ENV PIP_ROOT_USER_ACTION=ignore
 
 # Define the entry point for the container
 CMD python ./main.py
+EXPOSE 5000
+
 

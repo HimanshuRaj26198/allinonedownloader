@@ -1,8 +1,12 @@
 from pytube import YouTube
 from moviepy.editor import *
-from flask import send_from_directory, send_file, abort
-from pathlib import Path
+from flask import send_file, abort, render_template
+import progress
+from tqdm import tqdm, trange
 from io import BytesIO
+
+# from pytube.cli import on_progress
+
 
 
 def get_all_video_resolutions(link):
@@ -13,16 +17,41 @@ def get_all_video_resolutions(link):
     except Exception as e:
         abort(204)
 
+def percent(self, tem, total):
+        perc = (float(tem) / float(total)) * float(100)
+        return perc
+
+def progress_function(self,stream, chunk,file_handle, bytes_remaining):
+    size = stream.filesize
+    p = 0
+    while p <= 100:
+        progress = p
+        print(str(p)+'%')
+        p = percent(bytes_remaining, size)
+        print(p, "PROGRESS P")
+        print("PROGRESS", progress)
+
+def on_progress(stream, chunk, bytes_remaining):
+    total_size=stream.filesize
+    bytes_download=total_size  - bytes_remaining
+    percentage_of_completion=bytes_download / total_size * 100
+    per=str(int(percentage_of_completion))
+    print(per)
+    return {"per" : per}
+
 def DownloadYTVideo(link):
-    youtubeObject = YouTube(link)
+    buffer=BytesIO()
+    youtubeObject = YouTube(link, on_progress_callback=on_progress)
     youtubeObject = youtubeObject.streams.get_highest_resolution()
     try:
-        youtubeObject.download('VIDEO_DOWNLOADS')
+        youtubeObject.stream_to_buffer(buffer)
+        buffer.seek(0)
         # downloadFolder= str(os.path.join(Path.home(), "VIDEO_DOWNLOADS"))
+        print("DOWNLOADING", "(:")
         print("DOWNLOADED")
         file_path= "./VIDEO_DOWNLOADS/" + youtubeObject.default_filename
-        print(file_path)
-        return send_file(file_path, as_attachment=True)
+        print(youtubeObject.mime_type)
+        return send_file(buffer, as_attachment=True, download_name=youtubeObject.default_filename, mimetype=youtubeObject.mime_type)
     except Exception as e:
         print("An error has occurred", e)
     

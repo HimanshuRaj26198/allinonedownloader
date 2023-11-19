@@ -5,6 +5,8 @@ from download_scripts import DownloadYTVideo, get_all_video_resolutions, return_
 from flask_cors import CORS
 import os
 
+print("EXECUTION MAIN JS")
+
 # Flask constructor takes the name of 
 # current module (__name__) as argument.
 app = Flask(__name__)
@@ -19,6 +21,10 @@ def find_video_resolutions():
 		video_url=request.json['video_url']
 		return get_all_video_resolutions(video_url)
 	
+@app.route('/robots.txt', methods=['GET'])
+def render_robots():
+	return render_template("robots.txt")
+	
 	
 
 @app.route('/', methods=['POST', 'GET'])
@@ -30,7 +36,7 @@ def home():
 			print("Error in rendering template", e)
 	elif(request.method == "POST"):
 		video_url=request.form['video_url']
-		print("VIDEO_URL", video_url)
+		print("VIDEO URL", video_url)
 		return DownloadYTVideo(video_url)
 
 
@@ -64,4 +70,4 @@ if __name__ == '__main__':
 
 	# run() method of Flask class runs the application 
 	# on the local development server.
-	app.run(host="0.0.0.0", port=5000, debug=False)
+	app.run(host="0.0.0.0", port=5000, debug=True)
