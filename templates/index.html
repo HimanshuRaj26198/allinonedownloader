@@ -238,7 +238,6 @@
                   class="url_input"
                   id="yt_url"
                   onKeyUp="getResols()"
-                  onpaste="getResols()"
                   type="text"
                   placeholder="Paster Youtube Video URL"
                   name="video_url"
@@ -494,5 +493,12 @@
         <div class="col-md-3"></div>
       </div>
     </footer>
+
+
+    <script>
+      document.getElementById("yt_url").onpaste(function(){
+        getResols()
+      })
+    </script>
   </body>
 </html>
