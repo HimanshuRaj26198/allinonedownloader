@@ -1,7 +1,6 @@
 from pytube import YouTube
 from moviepy.editor import *
 from flask import send_file, abort, render_template
-import progress
 from tqdm import tqdm, trange
 from io import BytesIO
 
