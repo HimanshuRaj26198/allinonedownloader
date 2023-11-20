@@ -1,6 +1,6 @@
 # Importing flask module in the project is mandatory
 # An object of Flask class is our WSGI application.
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, send_from_directory
 from download_scripts import DownloadYTVideo, get_all_video_resolutions, return_yt_by_itag
 from flask_cors import CORS
 # Flask constructor takes the name of 
@@ -18,8 +18,9 @@ def find_video_resolutions():
 		return get_all_video_resolutions(video_url)
 	
 @app.route('/robots.txt', methods=['GET'])
-def render_robots():
-	return render_template("robots.txt")
+@app.route('/sitemap.xml', methods=['GET'])
+def render_sitemap():
+	return send_from_directory(app.static_folder, request.path[1:])
 	
 	
 
