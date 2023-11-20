@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SmartYouTubeSaver - Video Downloader</title>
-    <meta name="description" content="SmartYouTubeSaver&#039;s Youtbe Video Downloader - secure and fast - Download Unlimited YouTube Videos. High Quality video download MP4, MP3, 3gp, high resolution very easily!" />
+    <meta name="description" content="SmartYouTubeSaver&#039;s Youtube Video Downloader -secure and fast- Download Unlimited YouTube Videos. High Quality video download MP4, MP3, 3gp very easily!" />
     <meata name="keyword" content="Download YouTube Videos, MP4, MP3, 3GP, Download High quality video, Download Unlimited YouTube Video" />
     <meta name=”robots” content="index, nofollow">
     <link rel="icon" type="image/x-icon" href="{{url_for('static', filename='/images/favicon.ico')}}" />
@@ -239,6 +239,10 @@
                   class="url_input"
                   id="yt_url"
                   onKeyUp="getResols()"
+                  onfovus="getResols()"
+                  onKeyDown="getResols()"
+                  onChange="getResols()"
+                  oniput="getResols()"
                   type="text"
                   placeholder="Paster Youtube Video URL"
                   name="video_url"
