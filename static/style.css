@@ -355,3 +355,35 @@ footer .footer_links_container {
   top: -10%;
   cursor: pointer;
 }
+
+#policy_top{
+  background-color: #190482;
+  height: 20vh;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.policy_list ol{
+  font-size: 20px;
+}
+
+.policy_list ol li{
+  font-weight: bold;
+  margin: 6px 0;
+}
+
+.policy_list ul{
+  font-size: 18px;
+}
+
+.policy_list ul li{
+  font-weight: normal;
+}
+
+.policy_content{
+  margin-bottom: 10vh;
+  padding: 4vw;
+  text-align: left;
+}

@@ -60,6 +60,10 @@ def download_yt_vide_by_itag():
 		except Exception as e:
 			print(e)
 
+@app.route('/policy.html', methods=['GET'])
+def return_policy():
+	return render_template('policy.html')
+
 
 
 
@@ -68,4 +72,4 @@ if __name__ == '__main__':
 
 	# run() method of Flask class runs the application 
 	# on the local development server.
-	app.run(host="0.0.0.0", port=5000, debug=False)
+	app.run(host="0.0.0.0", port=5000, debug=True)

@@ -229,251 +229,70 @@
         </div>
       </div>
     </nav>
-
     <main>
-      <section id="top_banner">
-        <div class="title_container">
-          <h1 class="main_title">YouTube Video Downloader</h1>
-        </div>
-        <div class="form_container">
-          <form id="searchForm" method="POST" action="/">
-            <div class="row">
-              <div class="col-md-10 col-sm-12 input_container">
-                <input
-                  class="url_input"
-                  id="yt_url"
-                  onkeyup="getResols()"
-                  onfocus="getResols()"
-                  onkeydown="getResols()"
-                  onchange="getResols()"
-                  oninput="getResols()"
-                  type="text"
-                  placeholder="Paster Youtube Video URL"
-                  name="video_url"
-                />
-              </div>
-              <div class="col-md-2 col-sm-12 button_container">
-                <input
-                  id="form_download_btn"
-                  class="btn btn-info"
-                  type="submit"
-                  value="Download HD"
-                />
-              </div>
+        <section id="policy_top" >
+            <div class="page_title" >
+                <h1>Terms and Conditions</h1>
             </div>
-          </form>
-        </div>
-
-
-    
-        
-        <div id="error_container">
-          <p>Can't find this video, please try with another url!</p>
-        </div>
-        <div id="loader_container">
-          <span>
-            <img src="{{url_for('static', filename='/images/loader.svg')}} " alt="Downloading a YouTube Video!" />
-          </span>
-          <p>Searching best resolutions for you!</p>
-        </div>
-        <div id="youtube_iframe_container">
-          <iframe
-            id="ytFrame"
-            width="200"
-            height="130"
-            src=""
-            title="YouTube video player"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen
-          ></iframe>
-        </div>
-        <div id="download_options">
-          <div class="title_container">
-            <h2>Download this YouTube Video in multiple resolutions.</h2>
-          </div>
-          <div class="row first_row">
-            <div class="col-md-10">
-              <div class="row">
-                <div class="col-md-4">
-                  <p>Video Title</p>
+        </section>
+        <section class="policy_content" >
+            <div class="row page_contnet" >
+                <div class="col-md-2" ></div>
+                <div class="col-md-8" >
+                    <p>This is the set of terms and policies that users must adhere to when utilizing SmartYTSaver YouTube Video Downloader.</p>
+                    <div class="policy_list" >
+                        <ol>
+                            <li>Use of the Service:
+                                <ul>
+                                    <li>Users must use the downloader for personal, non-commercial purposes only.</li>
+                                    <li>Prohibit the downloading of copyrighted content without proper authorization.</li>
+                                    <li>Prohibit any actions that violate YouTube's terms of service.</li>
+                                </ul>
+                            </li>
+                            <li>Copyright Compliance:
+                                <ul>
+                                   <li> Users must respect copyright laws and only download videos they have the right to access or use.</li>
+                                   <li>The service does not condone or support the unauthorized downloading of copyrighted material.</li>
+                                </ul>
+                                
+                            </li>
+                            <li>
+                                Liability and Disclaimers:
+                                <ul>
+                                    <li>The service is not responsible for any misuse or illegal use of downloaded content by users.</li>
+                                    <li>Limit liability for any damages resulting from the use of the service.</li>
+                                    <li>The service cannot guarantee the availability, quality, or functionality of downloaded videos.</li>
+                                </ul>
+                            </li>
+                            <li>Privacy Policy:
+                                <ul>
+                                    <li>Outline the data collected, if any, during the use of the service and how it's handled.</li>
+                                    <li>Ensure compliance with privacy laws and regulations.</li>
+                                </ul>
+                            </li>
+                            <li>
+                                Termination of Service:
+                                <ul>
+                                    <li>The service reserves the right to terminate or suspend access to anyone violating the terms and conditions.</li>
+                                </ul>
+                            </li>
+                            <li>Updates to Terms:
+                                <ul>
+                                    <li>The terms may be updated without prior notice, and continued use implies acceptance of the updated terms.</li>
+                                </ul>
+                            </li>
+                            <li>
+                                Legal Jurisdiction:
+                                <ul>
+                                    <li>Specify the jurisdiction governing the terms and any legal disputes.</li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
                 </div>
-                <div class="col-md-4">
-                  <p>Video Resolution</p>
-                </div>
-                <div class="col-md-4">
-                  <p>Format</p>
-                </div>
-              </div>
+                <div class="col-md-2" ></div>
             </div>
-            <div class="col-md-2 col-ms-12">
-              <p>Action</p>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section class="row section_second">
-        <div class="col-md-2 left_col"></div>
-        <div class="col-md-8 center_col">
-          <div class="platform_descr">
-            <p>
-              Discover a myriad of video downloading possibilities through
-              HNYouTube, the ultimate solution for overcoming YouTube's download
-              limitations. Whether there's a lack of native download features,
-              fear not – our fast, secure, and user-friendly service is
-              tailor-made to cater to your requirements!
-            </p>
-          </div>
-
-          <div class="icon_container">
-            <h3>Supported Platforms</h3>
-            <div class="row icons">
-              <div class="col-md-3 col-ms-12 icon_box">
-                <img
-                  class="os_icon"
-                  alt="Download High Quality YouTube videos on Windows!"
-                  src="{{url_for('static', filename='/images/window.png')}}"
-                />
-              </div>
-              <div class="col-md-3 col-ms-12 icon_box">
-                <img
-                  class="os_icon"
-                  alt="Download High Quality YouTube videos on MAC!"
-                  src="{{url_for('static', filename='/images/apple.png')}}"
-                />
-              </div>
-              <div class="col-md-3 col-ms-12 icon_box">
-                <img
-                  class="os_icon"
-                  alt="Download High Quality YouTube videos on Android!"
-                  src="{{url_for('static', filename='/images/android.png')}}"
-                />
-              </div>
-              <div class="col-md-3 col-ms-12 icon_box">
-                <img
-                  class="os_icon"
-                  alt="Download High Quality YouTube videos on Linux!"
-                  src="{{url_for('static', filename='/images/linux.png')}}"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div class="feature_list_container">
-            <ol>
-              <li>Unlimited Video Downloading with HNYouTube.</li>
-              <li>
-                We provide you an option to download video in your preferred
-                resolution.
-              </li>
-              <li>We guarranty a high prmium quality video and aurdio.</li>
-              <li>We provide multiple formats like 3gp, MP4, webm, etc...</li>
-              <li>Easy steps for downloading video.</li>
-              <li>Tutorial steps for downloaing video in description.</li>
-            </ol>
-          </div>
-
-          <div class="yt_video_guide">
-            <div class="guide_title">
-              <h2>
-                Complete Guide: How to Download Videos from YouTube Online
-              </h2>
-            </div>
-            <div class="row img_steps">
-              <div class="col-md-4 col-ms-12">
-                <img
-                  alt="Copy the video url from YouTube and pase in in the
-                SamrtYouTubeSaver."
-                  src="{{url_for('static', filename='/images/howto2.png')}}"
-                />
-                <p>
-                  Copy the video url from YouTube and pase in in the
-                  SamrtYouTubeSaver.
-                </p>
-              </div>
-              <div class="col-md-4 col-ms-12">
-                <img
-                  alt="After pasting the YouTube Video URL in SmartVideoSaver, wait
-                till all the reolutions gets loaded."
-                  src="{{url_for('static', filename='/images/howto3.png')}}"
-                />
-                <p>
-                  After pasting the YouTube Video URL in SmartVideoSaver, wait
-                  till all the reolutions gets loaded.
-                </p>
-              </div>
-              <div class="col-md-4 col-ms-12">
-                <img
-                  alt="Click on the Download button to download your YouTube video
-                from SmartYouTubeSaver."
-                  src="{{url_for('static', filename='/images/howto4.png')}}"
-                />
-                <p>
-                  Click on the Download button to download your YouTube video
-                  from SmartYouTubeSaver.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-2 right_col"></div>
-      </section>
-      <section class="row article_1">
-        <div class="col-md-2 left_col"></div>
-        <div class="col-md-8 center_col">
-          <div class="article_title">
-            <h2>How to download Any Video On Internet?</h2>
-          </div>
-          <div class="article_content">
-            <p>
-              If you're trying to download videos for which you have the right
-              permissions or that are provided for download by the content
-              creator, and you're using a tool like Internet Download Manager
-              (IDM), here's a general guide:
-            </p>
-
-            <ol>
-              <li>
-                <span class="list_title">Install IDM:</span> Make sure you have
-                IDM installed on your computer. You can download it from the
-                official website.
-              </li>
-              <li>
-                <span class="list_title">Enable Browser Extension:</span>IDM
-                usually integrates with web browsers like Chrome, Firefox, or
-                others. Ensure that the IDM extension is enabled in your
-                browser.
-              </li>
-              <li>
-                <span class="list_title">Visit the Video Page: </span>Open the
-                webpage where the video is located.
-              </li>
-              <li>
-                <span class="list_title">IDM Download Panel: </span>Once the IDM
-                extension is active, you should see a download button or panel
-                overlaid on the video. It may appear as a small icon on the
-                video or in the form of a download button.
-              </li>
-              <li>
-                <span class="list_title">Start Download: </span>Click on the
-                download button or panel. IDM will intercept the video link and
-                start the download process.
-              </li>
-              <li>
-                <span class="list_title">Choose Download Settings: </span>IDM
-                usually provides options to choose the video quality and
-                download settings. Select your preferred options.
-              </li>
-              <li>
-                <span class="list_title">Download Progress: </span>Monitor the
-                download progress in the IDM interface. Once the download is
-                complete, the video should be available on your computer.
-              </li>
-            </ol>
-          </div>
-        </div>
-        <div class="col-md-2 right_col"></div>
-      </section>
+        </section>
     </main>
     <footer>
       <div class="copyright">
@@ -495,7 +314,7 @@
         <div class="col-md-3">
           <a title="About Us" href="#" ><p>About Us</p></a>
           <a title="Privacey Policy" href="#" ><p>Privace Policy</p></a>
-          <a title="Terms of Service" href="#" ><p>Terms of Service</p></a>
+          <a title="Terms of Service" href="/policy.html" ><p>Terms of Service</p></a>
           <a title="Contact" href="#" ><p>Contact</p></a>
           <a title="API" href="#" ><p>API</p></a>
         </div>
