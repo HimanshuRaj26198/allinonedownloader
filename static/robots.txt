@@ -4,4 +4,4 @@ Disallow: /nogooglebot/
 User-agent: *
 Allow: /
 
-Sitemap: https://smartytsaver.com/sitemap.xml
+Sitemap: https://hsyoutube.com/sitemap.xml
