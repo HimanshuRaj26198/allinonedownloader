@@ -1,21 +1,22 @@
 # Importing flask module in the project is mandatory
 # An object of Flask class is our WSGI application.
 from flask import Flask, request, render_template, send_from_directory
-from download_scripts import DownloadYTVideo, get_all_video_resolutions, return_yt_by_itag
+from download_scripts import DownloadYTVideo, get_all_video_resolutions, return_yt_by_itag, VideoToMp3
 from flask_cors import CORS
 # Flask constructor takes the name of 
 # current module (__name__) as argument.
 app = Flask(__name__)
 CORS(app)
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS')
+    return response
 
 # The route() function of the Flask class is a decorator, 
 # which tells the application which URL should call 
 # the associated function.
-@app.route('/get_resolutions', methods=['POST'])
-def find_video_resolutions():
-	if(request.method == 'POST'):
-		video_url=request.json['video_url']
-		return get_all_video_resolutions(video_url)
+
 	
 @app.route('/robots.txt', methods=['GET'])
 @app.route('/sitemap.xml', methods=['GET'])
@@ -37,6 +38,11 @@ def home():
 		return DownloadYTVideo(video_url)
 
  
+@app.route('/get_resolutions', methods=['POST'])
+def find_video_resolutions():
+	if(request.method == 'POST'):
+		video_url=request.json['video_url']
+		return get_all_video_resolutions(video_url)
 
 
 @app.route('/downloadyoutubevideo', methods=['POST', 'GET'])
@@ -59,6 +65,14 @@ def download_yt_vide_by_itag():
 			return return_yt_by_itag(url, itag)
 		except Exception as e:
 			print(e)
+
+@app.route('/youtube_video_to_mp3.html', methods=['GET', 'POST'])
+def return_video_to_mp3():
+	if(request.method == "GET"):
+		return render_template('video_to_mp3.html')
+	elif(request.method == 'POST'):
+		video_url = request.form['video_url']
+		return VideoToMp3(video_url)
 
 @app.route('/policy.html', methods=['GET'])
 def return_policy():
