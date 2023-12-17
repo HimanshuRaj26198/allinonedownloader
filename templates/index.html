@@ -20,14 +20,14 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HSYouTube - Video Downloader</title>
-    <meta name="description" content="HSYouTube's Youtube Video Downloader Download Unlimited YouTube Videos. High Quality video download MP4, MP3, 3gp very easily and securely!" />
+    <title>SmartYTsaver - Video Downloader</title>
+    <meta name="description" content="SmartYTsaver's Youtube Video Downloader Download Unlimited YouTube Videos. High Quality video download MP4, MP3, 3gp very easily and securely!" />
     <meta name="keyword" content="Download YouTube Videos, MP4, MP3, 3GP, Download High quality video, Download Unlimited YouTube Video" />
-    <meta name="og:url" content="https://HSYouTube.com" />
+    <meta name="og:url" content="https://SmartYTsaver.com" />
     <meta name="og:type" content="homepage" />
-    <meta name="og:title" content="HSYouTube - Youtube Video Donwloader" />
+    <meta name="og:title" content="SmartYTsaver - Youtube Video Donwloader" />
     <meta name="og:description" content="Download videos from YouTube in multiple resolustions and quality. Download YouTube video for free in MP4, 4K, 3gp and many more qualities." />
-    <meta name="og:image" content="https://HSYouTube.com/static/images/preview.jpg" />
+    <meta name="og:image" content="https://SmartYTsaver.com/static/images/preview.jpg" />
     <meta name=”robots” content="index, nofollow">
     <link rel="icon" type="image/x-icon" href="{{url_for('static', filename='images/favicon.ico')}}" />
     <link rel="apple-touch-icon" href="{{url_for('static', filename='images/favicon.ico')}}" />
@@ -36,10 +36,10 @@
     <link rel="stylesheet" href="{{url_for('static', filename='fontawsome/all.min.css')}}"  crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script defer >
       function getResols() {
+         console.log("GET RESOLS TRIGGERED")
         document.getElementById("error_container").style.display = "none";
-        document
-          .getElementById("form_download_btn")
-          .setAttribute("disabled", "true");
+        document.getElementById("form_download_btn").setAttribute("disabled", "true");
+        console.log(document.getElementById("yt_url").value, "Value")
         if (document.getElementById("yt_url").value == "") {
           document.getElementById("download_options").style.display = "none";
           document.getElementById("error_container").style.display = "none";
@@ -100,6 +100,7 @@
                       .getElementById("form_download_btn")
                       .removeAttribute("disabled");
                     renderJSON(nStream, json.title);
+                    document.getElementById("thumbnail_img").src = json.thumbnail;
                   } else {
                     document.getElementById("resolutions_box").remove();
                     document.getElementById("loader_container").style.display =
@@ -149,11 +150,7 @@
           resItem1.classList.add("res_item");
           let displayTitle = document.createElement("p");
           displayTitle.innerHTML = title.substring(0, 15);
-          let youTubeImg = document.createElement("img");
-          youTubeImg.classList.add("youtubeImg");
-          resItem1.appendChild(youTubeImg);
-          resItem1.appendChild(displayTitle);
-          youTubeImg.src = `{{url_for("static", filename="images/youtube.png")}}`;
+          //resItem1.appendChild(displayTitle);
           let resItem2 = document.createElement("div");
           resItem2.classList.add("col-md-4");
           resItem2.classList.add("res_item");
@@ -201,7 +198,7 @@
           container.appendChild(videoResoItem);
         });
 
-        document.getElementById("download_options").appendChild(container);
+        document.getElementById("download_option_box").appendChild(container);
       }
 
       function downloadSelectedRes(url, itag) {
@@ -220,6 +217,12 @@
           .catch(function (e) {
             console.log(e);
           });
+      }
+
+      function checkIfUrl(){
+        if(document.getElementById("yt_url").startsWith("https://") && document.getElementById("yt_url").includes(".com")){
+          setTimeout(()=>{return getResols()}, 200);
+        }
       }
     </script>
     <style>
@@ -622,8 +625,8 @@
   <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
-        <a title="HSYouTube" class="navbar-brand" href="#">
-        <img src="{{url_for('static', filename='images/logo.png')}}" alt="HSYouTube - Download unlimited YouTube Videos"  /> HSYouTube</a>
+        <a title="SmartYTsaver" class="navbar-brand" href="#">
+        <img src="{{url_for('static', filename='images/logo.png')}}" alt="SmartYTsaver - Download unlimited YouTube Videos"  /> SmartYTsaver</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" >
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -658,11 +661,8 @@
                 <input
                   class="url_input"
                   id="yt_url"
-                  onkeyup="getResols()"
-                  onfocus="getResols()"
-                  onkeydown="getResols()"
-                  onchange="getResols()"
-                  oninput="getResols()"
+                  onpaste="setTimeout(()=>{return getResols()},200)"
+                  onchange="checkIfUrl()"
                   type="text"
                   placeholder="Paster Youtube Video URL"
                   name="video_url"
@@ -708,23 +708,27 @@
           <div class="title_container">
             <h2>Download this YouTube Video in multiple resolutions.</h2>
           </div>
-          <div class="row first_row">
-            <div class="col-md-10">
-              <div class="row">
-                <div class="col-md-4">
-                  <p>Video Title</p>
-                </div>
-                <div class="col-md-4">
-                  <p>Video Resolution</p>
-                </div>
-                <div class="col-md-4">
-                  <p>Format</p>
+        <div  class="row  download_option_box" >
+          <div class="col-md-2 col-ms-12 " >
+            <img id="thumbnail_img" src=""  />
+          </div>
+          <div id="download_option_box" class="col-md-10 col-ms-12" >
+            <div class="row first_row">
+              <div class="col-md-10">
+                <div class="row">
+                  <div class="col-md-6">
+                    <p>Video Resolution</p>
+                  </div>
+                  <div class="col-md-6">
+                    <p>Format</p>
+                  </div>
                 </div>
               </div>
+              <div class="col-md-2 col-ms-12">
+                <p>Action</p>
+              </div>
             </div>
-            <div class="col-md-2 col-ms-12">
-              <p>Action</p>
-            </div>
+          </div>
           </div>
         </div>
       </section>
@@ -734,7 +738,7 @@
           <div class="platform_descr">
             <p>
               Discover a myriad of video downloading possibilities through
-              HSYouTube, the ultimate solution for overcoming YouTube's download
+              SmartYTsaver, the ultimate solution for overcoming YouTube's download
               limitations. Whether there's a lack of native download features,
               fear not – our fast, secure, and user-friendly service is
               tailor-made to cater to your requirements!
@@ -777,7 +781,7 @@
 
           <div class="feature_list_container">
             <ol>
-              <li>Unlimited Video Downloading with HSYouTube.</li>
+              <li>Unlimited Video Downloading with SmartYTsaver.</li>
               <li>
                 We provide you an option to download video in your preferred
                 resolution.
@@ -821,12 +825,12 @@
               <div class="col-md-4 col-ms-12">
                 <img
                   alt="Click on the Download button to download your YouTube video
-                from HSYouTube."
+                from SmartYTsaver."
                   src="{{url_for('static', filename='images/howto4.png')}}"
                 />
                 <p>
                   Click on the Download button to download your YouTube video
-                  from HSYouTube.
+                  from SmartYTsaver.
                 </p>
               </div>
             </div>
@@ -894,7 +898,7 @@
     <footer>
       <div class="copyright">
         &#169; YouTube Downloader, made with
-        <span style="color: red">&#9829;</span> by HSYouTube.
+        <span style="color: red">&#9829;</span> by SmartYTsaver.
       </div>
       <div class="row footer_links_container">
         <div class="col-md-3">
