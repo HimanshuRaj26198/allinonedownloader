@@ -74,6 +74,10 @@ def return_video_to_mp3():
 		video_url = request.form['video_url']
 		return VideoToMp3(video_url)
 
+@app.route('/reelsdownloader.html', methods=['GET'])
+def return_reelsdownloader():
+	return render_template('reelsdownloader.html')
+
 @app.route('/policy.html', methods=['GET'])
 def return_policy():
 	return render_template('policy.html')
